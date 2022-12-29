@@ -6,89 +6,89 @@
 
 
 class User(object):
-    __user_phone = ''
-    __user_DOB = ''
-    __user_sex = 0
-    __user_province = ''
-    __user_city = ''
-    __user_district = ''
-    __user_register_time = ''
-    __user_image_path = ''
-    __user_id = 0
+    __phone = ''
+    __DOB = ''
+    __sex = 0
+    __province = ''
+    __city = ''
+    __district = ''
+    __register_time = ''
+    __image_path = ''
+    __id = 0
     __face_model_id = 0
     __fingerprint_model_id = 0
 
     @property
-    def user_phone(self):
-        return self.__user_phone
+    def phone(self):
+        return self.__phone
 
-    @user_phone.setter
-    def user_phone(self, user_phone):
-        self.__user_phone = user_phone
-
-    @property
-    def user_dob(self):
-        return self.__user_DOB
-
-    @user_dob.setter
-    def user_dob(self, user_dob):
-        self.__user_DOB = user_dob
+    @phone.setter
+    def phone(self, phone):
+        self.__phone = phone
 
     @property
-    def user_sex(self):
-        return self.__user_sex
+    def dob(self):
+        return self.__DOB
 
-    @user_sex.setter
-    def user_sex(self, user_sex):
-        self.__user_sex = user_sex
-
-    @property
-    def user_province(self):
-        return self.__user_province
-
-    @user_province.setter
-    def user_province(self, user_province):
-        self.__user_province = user_province
+    @dob.setter
+    def dob(self, dob):
+        self.__DOB = dob
 
     @property
-    def user_city(self):
-        return self.__user_city
+    def sex(self):
+        return self.__sex
 
-    @user_city.setter
-    def user_city(self, user_city):
-        self.__user_city = user_city
-
-    @property
-    def user_district(self):
-        return self.__user_district
-
-    @user_district.setter
-    def user_district(self, user_district):
-        self.__user_district = user_district
+    @sex.setter
+    def sex(self, sex):
+        self.__sex = sex
 
     @property
-    def user_register_time(self):
-        return self.__user_register_time
+    def province(self):
+        return self.__province
 
-    @user_register_time.setter
-    def user_register_time(self, user_register_time):
-        self.__user_register_time = user_register_time
-
-    @property
-    def user_image_path(self):
-        return self.__user_image_path
-
-    @user_image_path.setter
-    def user_image_path(self, user_image_path):
-        self.__user_image_path = user_image_path
+    @province.setter
+    def province(self, province):
+        self.__province = province
 
     @property
-    def user_id(self):
-        return self.__user_id
+    def city(self):
+        return self.__city
 
-    @user_id.setter
-    def user_id(self, user_id):
-        self.__user_id = user_id
+    @city.setter
+    def city(self, city):
+        self.__city = city
+
+    @property
+    def district(self):
+        return self.__district
+
+    @district.setter
+    def district(self, district):
+        self.__district = district
+
+    @property
+    def register_time(self):
+        return self.__register_time
+
+    @register_time.setter
+    def register_time(self, register_time):
+        self.__register_time = register_time
+
+    @property
+    def image_path(self):
+        return self.__image_path
+
+    @image_path.setter
+    def image_path(self, image_path):
+        self.__image_path = image_path
+
+    @property
+    def id(self):
+        return self.__id
+
+    @id.setter
+    def id(self, user_id):
+        self.__id = user_id
 
     @property
     def face_model_id(self):

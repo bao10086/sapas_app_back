@@ -10,7 +10,7 @@ from src.mapper.model import PwdFace
 
 def find_face_pwd_by_user_id(user_id):
     try:
-        face_pwd = db.session.query(PwdFace).filter(PwdFace.user_id == user_id).first()
+        face_pwd = db.session.query(PwdFace).filter_by(user_id=user_id, delete=0).first()
         if face_pwd is not None:
             return face_pwd
         else:
@@ -23,10 +23,10 @@ def find_face_pwd_by_user_id(user_id):
 
 def add_pwd(user_id, face_name, face_image_path):
     try:
-        pwd = db.session.query(PwdFace).filter_by(user_id=user_id, face_name=face_name).first()
+        pwd = db.session.query(PwdFace).filter_by(user_id=user_id, name=face_name).first()
         if pwd is not None:
             return False
-        pwd_face_db = PwdFace(user_id=user_id, face_name=face_name, face_image_path=face_image_path)
+        pwd_face_db = PwdFace(user_id=user_id, name=face_name, image_path=face_image_path, delete=0)
         db.session.add(pwd_face_db)
         db.session.commit()
         return True
@@ -38,12 +38,12 @@ def add_pwd(user_id, face_name, face_image_path):
 
 def del_pwd(user_id, pwd_name):
     try:
-        pwd = db.session.query(PwdFace).filter_by(user_id=user_id, face_name=pwd_name).first()
+        pwd = db.session.query(PwdFace).filter_by(user_id=user_id, name=pwd_name, delete=0).first()
         print(pwd)
         if pwd is None:
             return None
-        pwd_path = pwd.fingerprint_path
-        db.session.delete(pwd)
+        pwd_path = pwd.image_path
+        pwd.delete = 1
         db.session.commit()
         return pwd_path
     except Exception as e:
@@ -54,12 +54,12 @@ def del_pwd(user_id, pwd_name):
 
 def get_pwd(user_id):
     try:
-        models = db.session.query(PwdFace).filter(PwdFace.user_id == user_id).all()
+        models = db.session.query(PwdFace).filter_by(user_id=user_id, delete=0).all()
         if models is None:
             return None
         result = []
         for pwd in models:
-            result.append(pwd.face_name)
+            result.append(pwd.name)
         print(result)
         return result
     except Exception as e:
@@ -70,7 +70,7 @@ def get_pwd(user_id):
 
 def find_face_pwd_by_user_id_and_path(user_id, path):
     try:
-        pwd = db.session.query(PwdFace).filter_by(user_id=user_id, fingerprint_path=path).first()
+        pwd = db.session.query(PwdFace).filter_by(user_id=user_id, image_path=path, delete=0).first()
         return pwd
     except Exception as e:
         db.session.rollback()
@@ -80,7 +80,7 @@ def find_face_pwd_by_user_id_and_path(user_id, path):
 
 def update_path(pwd, path):
     try:
-        pwd.fingerprint_path = path
+        pwd.image_path = path
         db.session.commit()
     except Exception as e:
         db.session.rollback()

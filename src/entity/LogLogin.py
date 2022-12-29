@@ -5,19 +5,19 @@
 # @Software : PyCharm
 
 class LogLogin(object):
-    __login_log_id = 0
+    __id = 0
     __user_id = 0
-    __login_time = ''
-    __login_address = ''
-    __login_device = ''
+    __time = ''
+    __address = ''
+    __device = ''
 
     @property
-    def login_log_id(self):
-        return self.__login_log_id
+    def id(self):
+        return self.__id
 
-    @login_log_id.setter
-    def login_log_id(self, login_log_id):
-        self.__login_log_id = login_log_id
+    @id.setter
+    def id(self, login_log_id):
+        self.__id = login_log_id
 
     @property
     def user_id(self):
@@ -28,25 +28,25 @@ class LogLogin(object):
         self.__user_id = user_id
 
     @property
-    def login_time(self):
-        return self.__login_time
+    def time(self):
+        return self.__time
 
-    @login_time.setter
-    def login_time(self, login_time):
-        self.__login_time = login_time
-
-    @property
-    def login_address(self):
-        return self.__login_address
-
-    @login_address.setter
-    def login_address(self, login_address):
-        self.__login_address = login_address
+    @time.setter
+    def time(self, time):
+        self.__time = time
 
     @property
-    def login_device(self):
-        return self.__login_device
+    def address(self):
+        return self.__address
 
-    @login_device.setter
-    def login_device(self, login_device):
-        self.__login_device = login_device
+    @address.setter
+    def address(self, address):
+        self.__address = address
+
+    @property
+    def device(self):
+        return self.__device
+
+    @device.setter
+    def device(self, device):
+        self.__device = device

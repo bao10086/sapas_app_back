@@ -25,15 +25,10 @@ def add_feedback():
         result['data'] = '用户不存在'
         return result
     print('用户', phone, '正在反馈信息')
-    user_id = user.user_id
+    user_id = user.id
 
     # 将反馈信息插入数据库
     if feedback_mapper.add_feedback(user_id, message):
-        # 找到插入位置的feedback_id
-        feedback = feedback_mapper.find_feedback_by_user_id_and_path(user_id)
-        if feedback is None:
-            return result
-
         print('添加反馈信息成功！')
         result['code'] = 200
         result['data'] = '添加成功！'
@@ -54,7 +49,7 @@ def get_feedback():
         result['data'] = '用户不存在'
         return result
     print('用户', phone, '正在访问反馈信息')
-    user_id = user.user_id
+    user_id = user.id
 
     feedback_list = feedback_mapper.find_by_user_id(user_id)
     if feedback_list is None:
@@ -65,8 +60,8 @@ def get_feedback():
     # 遍历所有查找的反馈信息
     for feedback in feedback_list:
         # 添加进返回数组
-        body = {"time": feedback.feedback_time.strftime('%Y-%m-%d %H:%M:%S'), "info": feedback.feedback_info,
-                "is_solve": feedback.feedback_is_solve, "reply": feedback.admin_feedback,
+        body = {"time": feedback.time.strftime('%Y-%m-%d %H:%M:%S'), "info": feedback.info,
+                "is_solve": feedback.is_solve, "reply": feedback.admin_feedback,
                 "reply_time": feedback.admin_feedback_time}
         body_list.append(body)
     result['code'] = 200

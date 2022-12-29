@@ -27,15 +27,15 @@ def get_login_log():
         result['code'] = 404
         result['data'] = '用户不存在'
         return result
-    user_id = user.user_id
+    user_id = user.id
     print('用户', phone, '正在获取登录日志信息')
 
     logs = login_log_mapper.find_log_by_phone(user_id)
     logs_data = []
     for log in logs:
         if date in str(log.login_time):
-            return_data = {'device': log.login_device, 'time': log.login_time.strftime('%Y-%m-%d %H:%M:%S'),
-                           'position': log.longitude_and_latitude}
+            return_data = {'device': log.device, 'time': log.time.strftime('%Y-%m-%d %H:%M:%S'),
+                           'position': log.address}
             logs_data.append(return_data)
     result['logs'] = logs_data
     return result
@@ -55,14 +55,14 @@ def add_login_log():
         result['code'] = 404
         result['data'] = '用户不存在'
         return result
-    user_id = user.user_id
+    user_id = user.id
     print('用户', phone, '正在写入登录日志')
 
     log = LogLogin()
     log.user_id = user_id
-    log.login_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-    log.longitude_and_latitude = position
-    log.login_device = device
+    log.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    log.address = position
+    log.device = device
     if login_log_mapper.add_login_log(log):
         result['code'] = 200
         notices = notice_mapper.get_notice_by_id(user_id)
@@ -74,7 +74,7 @@ def add_login_log():
             regex = re.compile("(?:[|,)" + str(user_id) + "(?:,|])")
             if regex.findall(notice.user_ids):
                 print(notice.user_ids)
-                notice_data = {'title': notice.notice_title, 'info': notice.notice_info, 'time': notice.notice_time}
+                notice_data = {'title': notice.title, 'info': notice.info, 'time': notice.time}
                 data.append(notice_data)
         result['data'] = data
         return result

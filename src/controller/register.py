@@ -36,18 +36,18 @@ def send_code():
     code = str(random.randint(1000, 9999))
     params = {'number': phone, 'templateId': '10495', 'templateParams': [code, '1']}
     res = json.loads(client.send(params))
-    user = User()
+    new_user = User()
     print(phone)
     for user in users:
-        if user.user_phone == phone:
+        if user.phone == phone:
             res['code'] = 200
             res['data'] = '用户重新注册'
             res['secret'] = code
             print('用户重新注册：', phone)
             return res
-    user.user_phone = phone
-    print(user.user_phone)
-    users.append(user)
+    new_user.phone = phone
+    print(new_user.phone)
+    users.append(new_user)
     print('users添加新用户', phone)
     res['secret'] = code
     print(res)
@@ -75,14 +75,14 @@ def set_information():
     result = {'code': 404, 'data': '找不到用户'}
     # 查询用户
     for user in users:
-        if user.user_phone == phone:
+        if user.phone == phone:
             print('用户', phone, '正在设置个人信息')
-            user.user_image_path = image_path
-            user.user_sex = sex
-            user.user_dob = birthday
-            user.user_province = province
-            user.user_city = city
-            user.user_district = district
+            user.image_path = image_path
+            user.sex = sex
+            user.dob = birthday
+            user.province = province
+            user.city = city
+            user.district = district
             image.save(image_path)
             if os.path.isfile(image_path) is False:
                 result['data'] = '保存头像失败'
@@ -120,7 +120,7 @@ def register_fingerprint_model():
     finger_file_name = '1.wav'
     # 查询用户
     for user in users:
-        if user.user_phone == phone:
+        if user.phone == phone:
             print('用户', phone, '正在注册指纹')
             user.fingerprint_model_id = fingerprint_path
             file.save(fingerprint_path)
@@ -152,13 +152,12 @@ def register_face_model():
     print('用户', phone, '注册中')
     # 查询用户
     for user in users:
-        if user.user_phone == phone:
+        if user.phone == phone:
             print('用户', phone, '正在注册人脸')
-            user.face_model = file  # 保存人脸
             if user_mapper.add_user(user):  # 添加用户成功
                 # 找到数据库对应的user_id
                 user_db = user_mapper.find_user_by_phone(phone)
-                user_id = user_db.user_id
+                user_id = user_db.id
 
                 # 指纹路径名：手机号码+pwd_id，例如：15973958319_1.jpg
                 fingerprint_path = user.fingerprint_model_id
@@ -171,8 +170,7 @@ def register_face_model():
                     # 设置成功返回值
                     result['code'] = 200
                     result['data'] = '添加成功'
-                    # users.remove(user)
-                    print(users)
+                    users.remove(user)
                     return result
                 return result
     result['code'] = 404

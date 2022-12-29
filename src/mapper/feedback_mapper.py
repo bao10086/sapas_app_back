@@ -29,16 +29,6 @@ def add_feedback(user_id, message):
     return False
 
 
-def find_feedback_by_user_id_and_path(user_id, path):
-    try:
-        feedback = db.session.query(Feedback).filter_by(user_id=user_id, feedback_image_folder_path=path).first()
-        return feedback
-    except Exception as e:
-        db.session.rollback()
-        print(e)
-    return None
-
-
 def find_by_user_id(user_id):
     try:
         feedback_list = db.session.query(Feedback).filter(Feedback.user_id == user_id).all()

@@ -19,7 +19,7 @@ def is_right_face(phone):
 
 def find_name_by_phone(phone, file):
     print(phone, file)
-    return '默认'
+    return None
 
 
 if __name__ == '__main__':

@@ -28,12 +28,12 @@ def get_information():
         result['data'] = '用户不存在'
         return result
     # 获取头像信息
-    print(user.user_image_path)
-    with open(user.user_image_path, 'rb') as f:
+    print(user.image_path)
+    with open(user.image_path, 'rb') as f:
         data = base64.b64encode(f.read())
     # 获取返回信息
-    msg = {'image': str(data), 'sex': user.user_sex, 'birthday': user.user_DOB.strftime('%Y-%m-%d'),
-           'position': user.user_province + user.user_city + user.user_district}
+    msg = {'image': str(data), 'sex': user.sex, 'birthday': user.DOB.strftime('%Y-%m-%d'),
+           'position': user.province + user.city + user.district}
     result['msg'] = msg
     result['code'] = 200
     result['data'] = '返回成功'
@@ -73,12 +73,12 @@ def set_information():
 
     # 更新数据库操作
     new_user = User()
-    new_user.user_phone = phone
-    new_user.user_sex = sex
-    new_user.user_province = province
-    new_user.user_city = city
-    new_user.user_district = district
-    new_user.user_dob = birthday
+    new_user.phone = phone
+    new_user.sex = sex
+    new_user.province = province
+    new_user.city = city
+    new_user.district = district
+    new_user.dob = birthday
     if user_mapper.update_user_information(new_user) is False:
         return result
     result['code'] = 200
