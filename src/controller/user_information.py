@@ -9,7 +9,7 @@ import cpca
 from flask import Blueprint, request
 
 from src.entity.User import User
-from src.mapper import user_mapper
+from src.mapper import user_mapper, error_log_mapper
 from src.util import constant
 
 blueprint = Blueprint('user', __name__, url_prefix="/user")
@@ -26,6 +26,7 @@ def get_information():
         print('找不到用户', phone)
         result['code'] = 404
         result['data'] = '用户不存在'
+        error_log_mapper.add_error(phone + result['data'])
         return result
     # 获取头像信息
     print(user.image_path)
@@ -68,6 +69,7 @@ def set_information():
     if user is None:
         result['code'] = 404
         result['data'] = '找不到用户'
+        error_log_mapper.add_error(phone + "设置用户信息" + result['data'])
         return result
     print('用户', phone, '正在更新个人信息')
 

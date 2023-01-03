@@ -9,7 +9,7 @@ import time
 from flask import Blueprint, request
 
 from src.entity.LogLogin import LogLogin
-from src.mapper import user_mapper, login_log_mapper, notice_mapper
+from src.mapper import user_mapper, login_log_mapper, notice_mapper, error_log_mapper
 
 blueprint = Blueprint('login_log', __name__, url_prefix="/login_log")
 
@@ -26,6 +26,7 @@ def get_login_log():
     if user is None:
         result['code'] = 404
         result['data'] = '用户不存在'
+        error_log_mapper.add_error(phone + "获取登录日志" + result['data'])
         return result
     user_id = user.id
     print('用户', phone, '正在获取登录日志信息')
@@ -33,7 +34,7 @@ def get_login_log():
     logs = login_log_mapper.find_log_by_phone(user_id)
     logs_data = []
     for log in logs:
-        if date in str(log.login_time):
+        if date in str(log.time):
             return_data = {'device': log.device, 'time': log.time.strftime('%Y-%m-%d %H:%M:%S'),
                            'position': log.address}
             logs_data.append(return_data)
@@ -54,6 +55,7 @@ def add_login_log():
     if user is None:
         result['code'] = 404
         result['data'] = '用户不存在'
+        error_log_mapper.add_error(phone + "新增登录日志" + result['data'])
         return result
     user_id = user.id
     print('用户', phone, '正在写入登录日志')
@@ -69,6 +71,7 @@ def add_login_log():
         data = []
         if notices is None:
             result['data'] = '通知为空'
+            error_log_mapper.add_error(phone + "新增登录日志" + result['data'])
             return result
         for notice in notices:
             regex = re.compile("(?:[|,)" + str(user_id) + "(?:,|])")
@@ -78,4 +81,5 @@ def add_login_log():
                 data.append(notice_data)
         result['data'] = data
         return result
+    error_log_mapper.add_error(phone + "新增登录日志" + result['data'])
     return result

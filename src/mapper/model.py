@@ -1,7 +1,7 @@
 # -*- coding = utf-8 -*-
 # @Time : 2022/11/14 17:11
 # @Author : 曾佳宝
-# @File : model.py
+# @File : pwd.py
 # @Software : PyCharm
 
 from src.app import db
@@ -32,13 +32,13 @@ class ClassicProblem(db.Model):
 class Feedback(db.Model):
     __tablename__ = 'feedback'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id", ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), nullable=False)
     time = db.Column(db.TIMESTAMP, nullable=False)
     info = db.Column(db.Text, nullable=False)
     is_solve = db.Column(db.Boolean, nullable=False)
     admin_feedback = db.Column(db.String(200))
     admin_feedback_time = db.Column(db.TIMESTAMP)
-    delete = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
 
 # ==============================================================
@@ -49,7 +49,7 @@ class LogError(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     time = db.Column(db.TIMESTAMP, nullable=False)
     info = db.Column(db.Text, nullable=False)
-    delete = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
 
 # ==============================================================
@@ -58,11 +58,11 @@ class LogError(db.Model):
 class LogLogin(db.Model):
     __tablename__ = 'log_login'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id", ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), nullable=False)
     time = db.Column(db.TIMESTAMP, nullable=False)
     address = db.Column(db.String(50), nullable=False)
     device = db.Column(db.String(50), nullable=False)
-    delete = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
 
 # ==============================================================
@@ -75,7 +75,7 @@ class ModelFace(db.Model):
     path = db.Column(db.String(500), nullable=False)
     upload_time = db.Column(db.TIMESTAMP, nullable=False)
     used = db.Column(db.Integer, nullable=False)
-    delete = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
 
 # ==============================================================
@@ -84,11 +84,11 @@ class ModelFace(db.Model):
 class ModelFingerprint(db.Model):
     __tablename__ = 'model_fingerprint'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id", ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     path = db.Column(db.String(500), nullable=False)
     update_time = db.Column(db.TIMESTAMP)
-    delete = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
 
 # ==============================================================
@@ -118,10 +118,10 @@ class Permissions(db.Model):
 class PwdFace(db.Model):
     __tablename__ = 'pwd_face'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id", ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     image_path = db.Column(db.String(500), nullable=False)
-    delete = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
 
 # ==============================================================
@@ -130,10 +130,10 @@ class PwdFace(db.Model):
 class PwdFingerprint(db.Model):
     __tablename__ = 'pwd_fingerprint'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id", ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     path = db.Column(db.String(500), nullable=False)
-    delete = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
 
 # ==============================================================
@@ -169,9 +169,9 @@ class User(db.Model):
     register_time = db.Column(db.Date)
     image_path = db.Column(db.String(500))
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    fingerprint_model_id = db.Column(db.Integer, db.ForeignKey("model_fingerprint.fingerprint_model_id",
+    fingerprint_model_id = db.Column(db.Integer, db.ForeignKey("model_fingerprint.id",
                                                                ondelete='CASCADE'), nullable=False)
-    delete = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
 
 # ==============================================================
@@ -179,5 +179,5 @@ class User(db.Model):
 # ==============================================================
 class UserRole(db.Model):
     __tablename__ = 'user_role'
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id", ondelete='CASCADE'), primary_key=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), primary_key=True, nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey("role.role_id", ondelete='CASCADE'), primary_key=True, nullable=False)

@@ -12,4 +12,4 @@ def is_right_fingerprint(phone, radio):
 
 def find_name_by_phone(phone, file):
     print(phone, file)
-    return None
+    return '默认'

@@ -15,8 +15,9 @@ class User(object):
     __register_time = ''
     __image_path = ''
     __id = 0
-    __face_model_id = 0
-    __fingerprint_model_id = 0
+    __face_pwd_path = ''
+    __fingerprint_pwd_path = ''
+    __fingerprint_model_path = ''
 
     @property
     def phone(self):
@@ -91,17 +92,25 @@ class User(object):
         self.__id = user_id
 
     @property
-    def face_model_id(self):
-        return self.__face_model_id
+    def face_pwd_path(self):
+        return self.__face_pwd_path
 
-    @face_model_id.setter
-    def face_model_id(self, face_model_id):
-        self.__face_model_id = face_model_id
+    @face_pwd_path.setter
+    def face_model_id(self, face_pwd_path):
+        self.__face_pwd_path = face_pwd_path
 
     @property
-    def fingerprint_model_id(self):
-        return self.__fingerprint_model_id
+    def fingerprint_pwd_path(self):
+        return self.__fingerprint_pwd_path
 
-    @fingerprint_model_id.setter
-    def fingerprint_model_id(self, fingerprint_model_id):
-        self.__fingerprint_model_id = fingerprint_model_id
+    @fingerprint_pwd_path.setter
+    def fingerprint_pwd_path(self, fingerprint_pwd_path):
+        self.__fingerprint_pwd_path = fingerprint_pwd_path
+
+    @property
+    def fingerprint_model_path(self):
+        return self.__fingerprint_model_path
+
+    @fingerprint_model_path.setter
+    def fingerprint_model_path(self, fingerprint_model_path):
+        self.__fingerprint_model_path = fingerprint_model_path

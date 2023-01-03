@@ -4,6 +4,7 @@
 # @File : notice_mapper.py
 # @Software : PyCharm
 from src.app import db
+from src.mapper import error_log_mapper
 from src.mapper.model import Notice
 
 
@@ -13,5 +14,6 @@ def get_notice_by_id(user_id):
         return notices
     except Exception as e:
         db.session.rollback()
+        error_log_mapper.add_error(e)
         print(e)
     return None
