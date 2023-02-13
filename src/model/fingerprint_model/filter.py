@@ -1,15 +1,13 @@
+import os
 
 import numpy as np
-import os
-from scipy.io import wavfile
 import scipy.signal
+from scipy.io import wavfile
 
-#常量设置
+# 常量设置
 lowcut = 3000
 highcut = 15000
 FRAME_RATE = 44100
-
-
 
 
 def butter_bandpass(lowcut, highcut, fs, order=5):
@@ -19,15 +17,15 @@ def butter_bandpass(lowcut, highcut, fs, order=5):
     b, a = scipy.signal.butter(order, [low, high], btype='band')
     return b, a
 
+
 def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     b, a = butter_bandpass(lowcut, highcut, fs, order=order)
     y = scipy.signal.lfilter(b, a, data)
     return y
 
+
 def bandpass_filter(buffer):
     return butter_bandpass_filter(buffer, lowcut, highcut, FRAME_RATE, order=6)
-
-
 
 
 def getwavfiles(path):
@@ -38,8 +36,7 @@ def getwavfiles(path):
     return wav
 
 
-
-def filtered_write(wave,filtered_path):
+def filtered_write(wave, filtered_path):
     print(wave)
     print(os.path.join(wave))
     samplerate, data = wavfile.read(os.path.join(wave))
@@ -48,27 +45,19 @@ def filtered_write(wave,filtered_path):
     filtered = np.apply_along_axis(bandpass_filter, 0, data).astype('int16')
     print(222222)
     print(wave)
-    #print(wave.split("/")[3])
-    wavfile.write(os.path.join(filtered_path+wave), samplerate, filtered)
+    # print(wave.split("/")[3])
+    wavfile.write(os.path.join(filtered_path + wave), samplerate, filtered)
 
 
-
-
-
-
-
-
-
-
-def filter_main(root,filtered_path):
+def filter_main(root, filtered_path):
     print(root)
 
-    #wavs = getwavfiles(root)
+    # wavs = getwavfiles(root)
     # for wav in wavs:
     #     print(wav)
     #     print(11111111111111)
-    filtered_write(root,filtered_path)
+    filtered_write(root, filtered_path)
     print("过滤完毕")
-    #传给split
+    # 传给split
     print(filtered_path)
     return filtered_path

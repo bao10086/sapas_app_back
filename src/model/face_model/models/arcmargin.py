@@ -1,8 +1,8 @@
+import math
+
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torch.nn import Parameter
-import math
 
 
 def _paddle_where_more_than(target, limit, x, y):

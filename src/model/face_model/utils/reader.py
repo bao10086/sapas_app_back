@@ -1,8 +1,7 @@
-import os
-import random
 import mmap
+import random
+
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image, ImageEnhance
 from torch.utils import data

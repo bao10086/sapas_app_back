@@ -65,8 +65,11 @@ def get_feedback():
     for feedback in feedback_list:
         # 添加进返回数组
         body = {"time": feedback.time.strftime('%Y-%m-%d %H:%M:%S'), "info": feedback.info,
-                "is_solve": feedback.is_solve, "reply": feedback.admin_feedback,
-                "reply_time": feedback.admin_feedback_time}
+                "is_solve": feedback.is_feedbackd, "reply": feedback.admin_feedback}
+        if feedback.admin_feedback_time is not None:
+            body["reply_time"] = feedback.admin_feedback_time.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            body["reply_time"] = feedback.admin_feedback_time
         body_list.append(body)
     result['code'] = 200
     result['data'] = '查找成功'

@@ -1,4 +1,5 @@
-import time, threading
+import threading
+import time
 
 
 def sing():
@@ -23,9 +24,8 @@ if __name__ == '__main__':
 
     t2.start()
 
-
     print("Main thread execution completed")
     a = 3
     b = 4
-    print(a+b)
+    print(a + b)
     # exit()

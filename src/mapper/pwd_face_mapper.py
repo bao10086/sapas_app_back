@@ -25,9 +25,6 @@ def find_face_pwd_by_user_id(user_id):
 
 def add_pwd(user_id, face_name, face_image_path):
     try:
-        pwd = db.session.query(PwdFace).filter_by(user_id=user_id, name=face_name).first()
-        if pwd is not None:
-            return False
         pwd_face_db = PwdFace(user_id=user_id, name=face_name, image_path=face_image_path, deleted=0)
         db.session.add(pwd_face_db)
         db.session.commit()
@@ -84,20 +81,10 @@ def find_face_pwd_by_user_id_and_path(user_id, path):
     return None
 
 
-def find_face_pwd_by_user_id_and_name(user_id, name):
-    try:
-        pwd = db.session.query(PwdFace).filter_by(user_id=user_id, name=name, deleted=0).first()
-        return pwd
-    except Exception as e:
-        db.session.rollback()
-        error_log_mapper.add_error(e)
-        print(e)
-    return None
-
-
-def update_path(pwd, path):
+def update_path_and_name(pwd, path, name):
     try:
         pwd.image_path = path
+        pwd.name = name
         db.session.commit()
     except Exception as e:
         db.session.rollback()

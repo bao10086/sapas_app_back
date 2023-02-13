@@ -8,8 +8,3 @@
 def is_right_fingerprint(phone, radio):
     print(phone, radio)
     return True
-
-
-def find_name_by_phone(phone, file):
-    print(phone, file)
-    return '默认'

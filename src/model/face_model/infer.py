@@ -1,5 +1,3 @@
-import argparse
-import functools
 import os
 import time
 
@@ -9,22 +7,23 @@ import torch
 from PIL import ImageDraw, ImageFont, Image  # 图像处理模块
 
 from src.model.face_model.detection.face_detect import MTCNN
-from src.model.face_model.utils.utils import add_arguments, print_arguments
 
-# from utils.utils import add_arguments, print_arguments
+# from src.model.face_model.utils.utils import add_arguments, print_arguments
+threshold = 0.6
+mobilefacenet_model_path = 'save_model/mobilefacenet.pth'
+mtcnn_model_path = 'save_model/mtcnn'
 
-parser = argparse.ArgumentParser(description=__doc__)
-add_arg = functools.partial(add_arguments, argparser=parser)
-add_arg('image_path', str, 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/src/model/face_model/dataset/test.jpg', '预测图片文件夹路径')
-add_arg('face_db_path', str, 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/src/model/face_model/face_db/', '人脸库路径')
-add_arg('threshold', float, 0.5, '判断相识度的阈值')
-add_arg('mobilefacenet_model_path', str, 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/'
-                                         'src/model/face_model/save_model/mobilefacenet.pth',
-        'MobileFaceNet预测模型的路径')  # mobilefacenet人脸识别
-add_arg('mtcnn_model_path', str, 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/'
-                                 'src/model/face_model/save_model/mtcnn/', 'MTCNN预测模型的路径')  # MTCNN用来获取人脸边界框和人脸特征点的位置
-args = parser.parse_args(args=[])
-print_arguments(args)
+
+# parser = argparse.ArgumentParser(description=__doc__)
+# add_arg = functools.partial(add_arguments, argparser=parser)
+# add_arg('image_path', str, 'dataset/test.jpg', '预测图片文件夹路径')
+# add_arg('face_db_path', str, 'face_db', '人脸库路径')
+# add_arg('threshold', float, 0.6, '判断相识度的阈值')
+# add_arg('mobilefacenet_model_path', str, 'save_model/mobilefacenet.pth',
+#         'MobileFaceNet预测模型的路径')  # mobilefacenet人脸识别
+# add_arg('mtcnn_model_path', str, 'save_model/mtcnn', 'MTCNN预测模型的路径')  # MTCNN用来获取人脸边界框和人脸特征点的位置
+# args = parser.parse_args()
+# print_arguments(args)
 
 
 # threshold
@@ -36,8 +35,7 @@ class Predictor:
         self.device = torch.device("cpu")
 
         # 加载人脸识别模型
-        self.model = torch.jit.load('D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/'
-                                    'src/model/face_model/save_model/mobilefacenet.pth', map_location='cpu')
+        self.model = torch.jit.load(mobilefacenet_model_path, )
         self.model.to(self.device)
         self.model.eval()
 
@@ -45,8 +43,7 @@ class Predictor:
 
     def load_face_db(self, face_db_path):
         faces_db = {}
-        for path in os.listdir('D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/'
-                               'src/model/face_model/face_db'):
+        for path in os.listdir(face_db_path):
             name = os.path.basename(path).split('.')[0]  # 得到图片名称
             image_path = os.path.join(face_db_path, path)  # 得到图片路径
             # decode从网络流中回复图像 encode压缩数据 方便传播
@@ -153,18 +150,25 @@ class Predictor:
         cv2.waitKey(0)
 
 
-def infer():
+def infer(phone, path):
     start = time.time()
-    predictor = Predictor(args.mtcnn_model_path, args.mobilefacenet_model_path, args.face_db_path,
-                          threshold=args.threshold)
-    boxes, names = predictor.recognition(args.image_path)
+    # "./src/model/face_model/face_db/" 是服务器上的地址
+    face_db_path_new = "./src/model/face_model/face_db/" + phone
+    # face_db_path_new = 'face_db'
+
+    predictor = Predictor(mtcnn_model_path, mobilefacenet_model_path, face_db_path_new,
+                          threshold=threshold)
+    boxes, names = predictor.recognition(path)
     if names is None:
-        return 'unknow'
+        return False
     print('预测的人脸位置：', boxes.astype(np.int_).tolist())
     print('识别的人脸名称：', names[0])
     print('总识别时间：%dms' % int((time.time() - start) * 1000))
     # predictor.draw_face(args.image_path, boxes, names)
-    return names[0]
+    for name in names:
+        if name != "unknow":
+            return True
+    return False
 
 
 if __name__ == '__main__':

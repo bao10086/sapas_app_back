@@ -35,10 +35,11 @@ class Feedback(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), nullable=False)
     time = db.Column(db.TIMESTAMP, nullable=False)
     info = db.Column(db.Text, nullable=False)
-    is_solve = db.Column(db.Boolean, nullable=False)
+    is_solve = db.Column(db.Boolean, nullable=True)
     admin_feedback = db.Column(db.String(200))
     admin_feedback_time = db.Column(db.TIMESTAMP)
-    deleted = db.Column(db.Integer)
+    deleted = db.Column(db.Integer, nullable=True)
+    is_feedbackd = db.Column(db.Boolean, nullable=True)
 
 
 # ==============================================================

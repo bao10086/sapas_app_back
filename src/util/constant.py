@@ -8,3 +8,4 @@ PATH_FACE_DB = 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/src/model/
 PATH_FACE_TEST = 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/src/model/face_model/dataset/'
 PATH_FINGER_DB = 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/src/model/fingerprint_model/models/raw_wav/'
 PATH_FINGER_MODEL_DB = 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/src/model/fingerprint_model/models/fingermodel/'
+PATH_FINGER_TEST = 'D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/src/model/fingerprint_model/models/dataset/'

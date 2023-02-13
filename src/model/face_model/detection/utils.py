@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+
 # 预处理数据，转化图像尺度并对像素归一
 def processed_image(img, scale):
     height, width, channels = img.shape
@@ -35,6 +36,7 @@ def convert_to_square(box):
     square_box[:, 2] = square_box[:, 0] + max_side - 1
     square_box[:, 3] = square_box[:, 1] + max_side - 1
     return square_box
+
 
 # **这个pad没懂
 def pad(bboxes, w, h):
@@ -162,10 +164,10 @@ def generate_bbox(cls_map, reg, scale, threshold):
     score = cls_map[t_index[0], t_index[1]]
     # 对应原图的box坐标，分类分数，box偏移量
     bounding_box = np.vstack([np.round((stride * t_index[1]) / scale),
-                             np.round((stride * t_index[0]) / scale),
-                             np.round((stride * t_index[1] + cellsize) / scale),
-                             np.round((stride * t_index[0] + cellsize) / scale),
-                             score,
-                             reg])
+                              np.round((stride * t_index[0]) / scale),
+                              np.round((stride * t_index[1] + cellsize) / scale),
+                              np.round((stride * t_index[0] + cellsize) / scale),
+                              score,
+                              reg])
     # shape[n,9]
     return bounding_box.T

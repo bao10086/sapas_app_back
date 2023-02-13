@@ -22,7 +22,7 @@ def find_log_by_phone(user_id):
 def add_login_log(log):
     try:
         log_db = LogLogin(user_id=log.user_id, time=log.time, device=log.device,
-                          address=log.address)
+                          address=log.address, deleted=0)
         db.session.add(log_db)
         db.session.commit()
         return True

@@ -10,7 +10,7 @@ class Feedback(object):
     __user_id = 0
     __feedback_time = ''
     __feedback_info = ''
-    __feedback_is_solve = 0
+    __feedback_is_feedbackd = 0
     __feedback_image_folder_path = 0
     __admin_feedback = ''
 
@@ -47,12 +47,12 @@ class Feedback(object):
         self.__feedback_info = feedback_info
 
     @property
-    def feedback_is_solve(self):
-        return self.__feedback_is_solve
+    def feedback_is_feedbackd(self):
+        return self.__feedback_is_feedbackd
 
-    @feedback_is_solve.setter
-    def feedback_is_solve(self, feedback_is_solve):
-        self.__feedback_is_solve = feedback_is_solve
+    @feedback_is_feedbackd.setter
+    def feedback_is_feedbackd(self, feedback_is_feedbackd):
+        self.__feedback_is_feedbackd = feedback_is_feedbackd
 
     @property
     def feedback_image_folder_path(self):

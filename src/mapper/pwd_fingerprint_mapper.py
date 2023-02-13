@@ -25,9 +25,6 @@ def find_fingerprint_pwd_by_user_id(user_id):
 
 def add_pwd(user_id, fingerprint_name, fingerprint_path):
     try:
-        pwd = db.session.query(PwdFingerprint).filter_by(user_id=user_id, name=fingerprint_name, deleted=0).first()
-        if pwd is not None:
-            return False
         pwd_fingerprint_db = PwdFingerprint(user_id=user_id, name=fingerprint_name,
                                             path=fingerprint_path, deleted=0)
         db.session.add(pwd_fingerprint_db)
@@ -84,20 +81,10 @@ def find_fingerprint_pwd_by_user_id_and_path(user_id, path):
     return None
 
 
-def find_fingerprint_pwd_by_user_id_and_name(user_id, name):
-    try:
-        pwd = db.session.query(PwdFingerprint).filter_by(user_id=user_id, name=name, deleted=0).first()
-        return pwd
-    except Exception as e:
-        print(e)
-        db.session.rollback()
-        error_log_mapper.add_error(e)
-    return None
-
-
-def update_path(pwd, path):
+def update_path_and_name(pwd, path, name):
     try:
         pwd.path = path
+        pwd.name = name
         db.session.commit()
     except Exception as e:
         db.session.rollback()

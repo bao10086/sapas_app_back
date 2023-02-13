@@ -1,9 +1,10 @@
 import distutils.util
-from tqdm import tqdm
+
 import cv2
 import numpy as np
 import torch
 from sklearn import preprocessing
+from tqdm import tqdm
 
 
 def print_arguments(args):

@@ -4,10 +4,10 @@
 # @File : app.py
 # @Software : PyCharm
 
+import pymysql
 from flask import Flask
 from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
-import pymysql
 
 
 class Application(Flask):

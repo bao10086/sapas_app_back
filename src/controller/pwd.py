@@ -48,10 +48,10 @@ def add_pwd():
     # 得到参数
     phone = request.form.get('user_phone')
     pwd_type = request.form.get('pwd_type')
-    pwd_name = request.form.get('pwd_name')
     pwd_file = request.files.get('pwd_file')
 
     result = {'code': 403, 'data': '设置失败'}
+    pwd_name = phone
     # 查询用户
     user = user_mapper.find_user_by_phone(phone)
     if user is None:
@@ -62,18 +62,6 @@ def add_pwd():
     user_id = user.id
 
     if pwd_type == '1':  # 指纹声音模型
-        # 查找是否已存在该密码
-        if fingerprint.find_name_by_phone(user_id, pwd_file) is not None:
-            result['code'] = 404
-            result['data'] = '指纹密码数据已存在'
-            error_log_mapper.add_error(phone + "添加密码" + result['data'])
-            return result
-        # 查找密码名是否重复
-        if pwd_fingerprint_mapper.find_fingerprint_pwd_by_user_id_and_name(user_id, pwd_name) is not None:
-            result['code'] = 404
-            result['data'] = '指纹密码名称已存在'
-            error_log_mapper.add_error(phone + "添加密码" + result['data'])
-            return result
         # 暂时的密码路径，需要之后获取pwd_id，以手机号/pwd_id.wav形式存储
         pwd_path = constant.PATH_FINGER_DB + phone + "/" + phone + ".wav"
         # 添加到数据库
@@ -84,26 +72,15 @@ def add_pwd():
         pwd_id = pwd.id
         # 更新路径信息
         pwd_path = constant.PATH_FINGER_DB + phone + "/" + str(pwd_id) + '.wav'
+        pwd_name = str(pwd_id)
         # 保存文件
         pwd_file.save(pwd_path)
         if os.path.isfile(pwd_path) is False:
             result['data'] = '保存密码失败'
             return result
         # 更新数据库
-        pwd_fingerprint_mapper.update_path(pwd, pwd_path)
+        pwd_fingerprint_mapper.update_path_and_name(pwd, pwd_path, pwd_name)
     else:  # 人脸模型
-        # 查找是否已存在该密码
-        if face.find_name_by_phone(user_id, pwd_file):
-            result['code'] = 404
-            result['data'] = '人脸密码数据已存在'
-            error_log_mapper.add_error(phone + "添加密码" + result['data'])
-            return result
-        # 查找密码名是否重复
-        if pwd_face_mapper.find_face_pwd_by_user_id_and_name(user_id, pwd_name) is not None:
-            result['code'] = 404
-            result['data'] = '人脸密码名称已存在'
-            error_log_mapper.add_error(phone + "添加密码" + result['data'])
-            return result
         # 暂时的密码路径，需要之后获取pwd_id，以手机号/pwd_id.jpg形式存储
         pwd_path = constant.PATH_FACE_DB + phone + "/" + phone + ".jpg"
         # 添加到数据库
@@ -113,6 +90,7 @@ def add_pwd():
         pwd_id = pwd.id
         # 更新路径信息
         pwd_path = constant.PATH_FACE_DB + phone + "/" + str(pwd_id) + '.jpg'
+        pwd_name = str(pwd_id)
         # 保存文件
         pwd_file.save(pwd_path)
         if os.path.isfile(pwd_path) is False:
@@ -120,7 +98,7 @@ def add_pwd():
             error_log_mapper.add_error(phone + "添加密码" + result['data'])
             return result
         # 更新数据库
-        pwd_face_mapper.update_path(pwd, pwd_path)
+        pwd_face_mapper.update_path_and_name(pwd, pwd_path, pwd_name)
     result['code'] = 200
     result['data'] = '添加成功'
     return result

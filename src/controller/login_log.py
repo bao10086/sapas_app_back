@@ -3,13 +3,12 @@
 # @Author : 曾佳宝
 # @File : login_log.py
 # @Software : PyCharm
-import re
 import time
 
 from flask import Blueprint, request
 
 from src.entity.LogLogin import LogLogin
-from src.mapper import user_mapper, login_log_mapper, notice_mapper, error_log_mapper
+from src.mapper import user_mapper, login_log_mapper, error_log_mapper
 
 blueprint = Blueprint('login_log', __name__, url_prefix="/login_log")
 
@@ -34,6 +33,7 @@ def get_login_log():
     logs = login_log_mapper.find_log_by_phone(user_id)
     logs_data = []
     for log in logs:
+        print(log.time)
         if date in str(log.time):
             return_data = {'device': log.device, 'time': log.time.strftime('%Y-%m-%d %H:%M:%S'),
                            'position': log.address}
@@ -67,19 +67,7 @@ def add_login_log():
     log.device = device
     if login_log_mapper.add_login_log(log):
         result['code'] = 200
-        notices = notice_mapper.get_notice_by_id(user_id)
-        data = []
-        if notices is None:
-            result['data'] = '通知为空'
-            error_log_mapper.add_error(phone + "新增登录日志" + result['data'])
-            return result
-        for notice in notices:
-            regex = re.compile("(?:[|,)" + str(user_id) + "(?:,|])")
-            if regex.findall(notice.user_ids):
-                print(notice.user_ids)
-                notice_data = {'title': notice.title, 'info': notice.info, 'time': notice.time}
-                data.append(notice_data)
-        result['data'] = data
+        result['data'] = '添加成功'
         return result
     error_log_mapper.add_error(phone + "新增登录日志" + result['data'])
     return result

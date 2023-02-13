@@ -4,16 +4,17 @@ import random
 import threading
 import time
 
+import cpca
 from flask import Blueprint, request
 
-import cpca
 import src.util.zhenzismsclient as smsclient
 from src.entity.User import User
 from src.mapper import pwd_face_mapper, error_log_mapper, model_fingerprint_mapper
 from src.mapper import pwd_fingerprint_mapper
 from src.mapper import user_mapper
-from src.util import constant
 from src.model.fingerprint_model import finger_reg
+from src.util import constant
+
 blueprint = Blueprint('register', __name__, url_prefix="/register")
 
 users = []
@@ -114,7 +115,7 @@ def register_fingerprint_model():
     file = request.files.get("fingerprint_file")
 
     result = {'code': 403, 'data': '添加指纹密码失败'}
-    # 指纹密码路径名：手机号码，例如：15973958318.wav(暂时路径)
+    # 指纹密码路径名：手机号码，例如：15973958319.wav(暂时路径)
     fingerprint_pwd_path = constant.PATH_FINGER_DB + phone + '/' + phone + '.wav'
     file.save(fingerprint_pwd_path)
     fingerprint_model_path = constant.PATH_FINGER_MODEL_DB + phone + '.pth'
@@ -181,10 +182,12 @@ def register_face_model():
                                                                                                   fingerprint_pwd_path)
                 fingerprint_pwd_id = fingerprint_pwd.id
                 fingerprint_new_pwd_path = constant.PATH_FINGER_DB + phone + '/' + str(fingerprint_pwd_id) + '.wav'
+                fingerprint_pwd_name = str(fingerprint_pwd_id)
                 # 修改密码文件名
                 os.rename(fingerprint_pwd_path, fingerprint_new_pwd_path)
                 # 更新指纹密码路径
-                pwd_fingerprint_mapper.update_path(fingerprint_pwd, fingerprint_new_pwd_path)
+                pwd_fingerprint_mapper.update_path_and_name(fingerprint_pwd, fingerprint_new_pwd_path,
+                                                            fingerprint_pwd_name)
 
                 # 指纹模型路径名：手机号码，例如：15973958319.pth
                 fingerprint_model_path = user.fingerprint_model_path
@@ -199,9 +202,11 @@ def register_face_model():
                     face_pwd = pwd_face_mapper.find_face_pwd_by_user_id_and_path(user_id, face_path)
                     face_pwd_id = face_pwd.id
                     face_path = constant.PATH_FACE_DB + phone + '/' + str(face_pwd_id) + '.jpg'
-                    os.makedirs(constant.PATH_FACE_DB + phone)
+                    face_pwd_name = str(face_pwd_id)
+                    if not os.path.exists(constant.PATH_FACE_DB + phone):
+                        os.makedirs(constant.PATH_FACE_DB + phone)
                     # 更新人脸密码路径
-                    pwd_face_mapper.update_path(face_pwd, face_path)
+                    pwd_face_mapper.update_path_and_name(face_pwd, face_path, face_pwd_name)
                     # 保存人脸密码
                     file.save(face_path)
                     if os.path.isfile(face_path) is False:

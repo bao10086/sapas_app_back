@@ -20,7 +20,7 @@ def add_feedback(user_id, message):
     try:
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         feedback = Feedback(user_id=user_id, time=current_time, info=message,
-                            is_solve=0, deleted=0)
+                            is_feedbackd=0, deleted=0, is_solve=0)
         db.session.add(feedback)
         db.session.commit()
         return True

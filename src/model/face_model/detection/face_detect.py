@@ -1,9 +1,9 @@
-import os
 import cv2
 import numpy as np
 import torch
 # 实现图片的缩放和形变
 from skimage import transform as trans
+
 from .utils import generate_bbox, py_nms, convert_to_square
 from .utils import pad, calibrate_box, processed_image
 
@@ -14,7 +14,7 @@ class MTCNN:
         # 获取P模型 P模型进行窗口滑动 从而需要坐标 将窗口->真实边框
         # self.pnet = torch.jit.load(os.path.join(model_path+'/', 'PNet.pth'))
         self.pnet = torch.jit.load('D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/'
-                                   'src/model/face_model/save_model/mtcnn/PNet.pth',map_location='cpu')
+                                   'src/model/face_model/save_model/mtcnn/PNet.pth', map_location='cpu')
         self.pnet.to(self.device)
         # dim不同是softmax不同维度之和为1
         self.softmax_p = torch.nn.Softmax(dim=0)
@@ -29,7 +29,7 @@ class MTCNN:
 
         # 获取O模型
         self.onet = torch.jit.load('D:/social/QQ/files/1448931856/FileRecv/sapas_app_back/'
-                                   'src/model/face_model/save_model/mtcnn/ONet.pth',map_location='cpu')
+                                   'src/model/face_model/save_model/mtcnn/ONet.pth', map_location='cpu')
         self.onet.to(self.device)
         self.softmax_o = torch.nn.Softmax(dim=-1)
         self.onet.eval()
@@ -110,7 +110,7 @@ class MTCNN:
         # 对应原图的box坐标和分数
         # print("this is all boxes *******")
         # print(all_boxes)
-        boxes_c = np.vstack([all_boxes[:, 0] +- all_boxes[:, 5] * bbw,
+        boxes_c = np.vstack([all_boxes[:, 0] + - all_boxes[:, 5] * bbw,
                              all_boxes[:, 1] + all_boxes[:, 6] * bbh,
                              all_boxes[:, 2] + all_boxes[:, 7] * bbw,
                              all_boxes[:, 3] + all_boxes[:, 8] * bbh,
